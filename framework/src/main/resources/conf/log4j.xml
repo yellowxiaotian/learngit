@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+
+	<!-- 控制台输出日志 -->
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d - %c -%-4r [%t] %-5p %x - %m%n" />
+		</layout>
+		<!--限制输出级别 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="ERROR" />
+			<param name="LevelMin" value="WARN" />
+		</filter>
+	</appender>
+
+	<!-- 写入log日志文件 -->
+	<appender name="FILE" class="org.apache.log4j.FileAppender">
+		<param name="threshold" value="WARN" />
+		<param name="File" value="${springmvc.root}/logs/logs_web.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d - %c -%-4r [%t] %-5p %x - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- 将错误日志写入到数据库 -->
+	<appender name="DATABASE" class="org.apache.log4j.jdbc.JDBCAppender">
+		<param name="threshold" value="WARN" />
+		<param name="URL" value="jdbc:mysql://localhost:3306/sdf_demo?useUnicode=true&amp;characterEncoding=utf-8" />
+		<param name="driver" value="com.mysql.jdbc.Driver" />
+		<param name="user" value="root" />
+		<param name="password" value="" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="INSERT INTO sdf_log4j(stamp, thread, info_level, class, message) VALUES ('%d', '%t', '%p', '%c', '%m')" />
+		</layout>
+	</appender>
+
+	<!-- 将错误日志发送邮件 -->
+	<appender name="MAIL" class="org.apache.log4j.net.SMTPAppender">
+		<param name="threshold" value="WARN" />
+		<!-- 日志的错误级别 <param name="threshold" value="fatal"/> -->
+		<!-- 缓存文件大小，日志达到512K时发送Email -->
+		<param name="BufferSize" value="512" />
+		<param name="From" value="kt56_linyi@126.com" />
+		<param name="SMTPHost" value="smtp.126.com" />
+		<param name="Subject" value="web应用错误日志" />
+		<param name="To" value="shangcent@126.com" />
+		<param name="SMTPUsername" value="kt56_linyi@126.com" />
+		<param name="SMTPPassword" value="kmzhiszgzkkwfwgf" />
+		<layout class="com.shangcent.util.MailLayoutEvaluator"></layout>
+	</appender>
+
+	<root>
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+		<appender-ref ref="DATABASE" />
+		<appender-ref ref="MAIL" />
+	</root>
+
+</log4j:configuration>

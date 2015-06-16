@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应类的SQL语句 -->
+<mapper namespace="com.shangcent.dao.UserDAO">
+	<!-- 新增用户 -->
+	<insert id="insertUser" parameterType="User" keyProperty="id">
+	    insert into sdf_user(code, user_name, password, role_id) values(#{code}, #{user_name}, #{password}, #{role_id})
+	</insert>
+    
+    <!-- 通过用户名和密码查询用户 -->
+    <select id="findUserByName" parameterType="java.lang.String" resultType="User">
+    	select * from sdf_user
+    	where 1=1
+    	and user_name = #{userName}
+    </select>      
+    
+    
+</mapper>
